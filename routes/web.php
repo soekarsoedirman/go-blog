@@ -4,8 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CommentController;
 
-// Route utama untuk CRUD blog
+
+// Rute default untuk URL '/'
+Route::get('/', [BlogController::class, 'index'])->name('home');
+
+// Rute resource untuk blogs
 Route::resource('blogs', BlogController::class);
+
 
 // Route untuk menyimpan komentar pada blog
 Route::post('blogs/{blog}/comments', [CommentController::class, 'store'])->name('comments.store');
