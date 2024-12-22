@@ -13,7 +13,7 @@ class BlogController extends Controller
             $query->where('title', 'like', '%' . $request->search . '%')
                   ->orWhere('content', 'like', '%' . $request->search . '%');
         }
-        $blogs = $query->latest()->get();
+        $blogs = Blog::latest()->paginate(10);
         return view('blogs.index', compact('blogs'));
     }
     
@@ -57,11 +57,11 @@ class BlogController extends Controller
         }
 
         $blog->update($data);
-        return redirect()->route('blogs.index')->with('success', 'Blog created successfully!');
+        return redirect()->route('blogs.index')->with('success', 'Blog updated successfully!');
     }
 
     public function destroy(Blog $blog) {
         $blog->delete();
-        return redirect()->route('blogs.index');
+        return redirect()->route('blogs.index')->with('success', 'Blog deleted successfully!');
     }
 }

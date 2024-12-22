@@ -4,6 +4,13 @@
 <div class="container">
     <h1>Blog List</h1>
 
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+
+
     <!-- Form Pencarian -->
     <form action="{{ route('blogs.index') }}" method="GET" class="mb-3">
         <input type="text" name="search" placeholder="Search blogs..." value="{{ request('search') }}">
