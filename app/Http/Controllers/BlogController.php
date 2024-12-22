@@ -7,10 +7,16 @@ use App\Models\Blog;
 
 class BlogController extends Controller
 {
-    public function index() {
-        $blogs = Blog::latest()->get();
+    public function index(Request $request) {
+        $query = Blog::query();
+        if ($request->has('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%')
+                  ->orWhere('content', 'like', '%' . $request->search . '%');
+        }
+        $blogs = $query->latest()->get();
         return view('blogs.index', compact('blogs'));
     }
+    
 
     public function create() {
         return view('blogs.create');
@@ -18,8 +24,8 @@ class BlogController extends Controller
 
     public function store(Request $request) {
         $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
+            'title' => 'required|string|max:255|unique:blogs,title,' ,
+            'content' => 'required|min:50',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -28,7 +34,7 @@ class BlogController extends Controller
         }
 
         Blog::create($data);
-        return redirect()->route('blogs.index');
+        return redirect()->route('blogs.index')->with('success', 'Blog created successfully!');
     }
 
     public function show(Blog $blog) {
@@ -41,8 +47,8 @@ class BlogController extends Controller
 
     public function update(Request $request, Blog $blog) {
         $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
+            'title' => 'required|string|max:255|unique:blogs,title,' . $blog->id,
+            'content' => 'required|min:50',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -51,7 +57,7 @@ class BlogController extends Controller
         }
 
         $blog->update($data);
-        return redirect()->route('blogs.index');
+        return redirect()->route('blogs.index')->with('success', 'Blog created successfully!');
     }
 
     public function destroy(Blog $blog) {
