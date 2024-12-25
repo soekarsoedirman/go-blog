@@ -1,22 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'Blog')</title>
+    
+    @vite(['resources/css/show.css'])
+</head>
+<body>
 <div class="container">
-    <h1>{{ $blog->title }}</h1>
+    <div class="judul">
+        <h1>{{ $blog->title }}</h1>
+    </div>
+    
     @if($blog->image)
         <img src="{{ asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}" style="max-width: 100%;">
     @endif
     <p>{{ $blog->content }}</p>
-
-    <hr>
-    <h3>Comments</h3>
-    <ul>
-        @foreach($blog->comments as $comment)
-            <li>
-                <strong>{{ $comment->author_name }}</strong>: {{ $comment->comment }}
-            </li>
-        @endforeach
-    </ul>
 
     <hr>
     <h3>Leave a Comment</h3>
@@ -41,4 +42,6 @@
     </div>
     @endforeach
 </div>
+</body>
+
 @endsection
